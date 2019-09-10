@@ -70,6 +70,28 @@ namespace Piranha.Repositories
         }
 
         /// <summary>
+        /// Gets all of the available revisions for the specified
+        /// page order by created date.
+        /// </summary>
+        /// <param name="id">The unique page id</param>
+        /// <returns>The available revisions</returns>
+        public async Task<IEnumerable<Models.Revision>> GetAllRevisions(Guid id)
+        {
+            return await _db.PageRevisions
+                .AsNoTracking()
+                .Where(r => r.PageId == id && r.Created < r.Page.LastModified)
+                .OrderByDescending(r => r.Created)
+                .Select(r => new Models.Revision
+                {
+                    Id = r.Id,
+                    ContentId = r.PageId,
+                    Created = r.Created
+                })
+                .ToListAsync()
+                .ConfigureAwait(false);
+        }
+
+        /// <summary>
         /// Gets the id of all pages that have a draft for
         /// the specified site.
         /// </summary>

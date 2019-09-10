@@ -32,6 +32,14 @@ namespace Piranha.Repositories
         Task<IEnumerable<Guid>> GetAllBlogs(Guid siteId);
 
         /// <summary>
+        /// Gets all of the available revisions for the specified
+        /// page order by created date.
+        /// </summary>
+        /// <param name="id">The unique page id</param>
+        /// <returns>The available revisions</returns>
+        Task<IEnumerable<Revision>> GetAllRevisions(Guid id);
+
+        /// <summary>
         /// Gets the id of all pages that have a draft for
         /// the specified site.
         /// </summary>

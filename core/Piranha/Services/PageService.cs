@@ -195,6 +195,17 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Gets all of the available revisions for the specified
+        /// page order by created date.
+        /// </summary>
+        /// <param name="id">The unique page id</param>
+        /// <returns>The available revisions</returns>
+        public async Task<IEnumerable<Revision>> GetAllRevisionsAsync(Guid id)
+        {
+            return await _repo.GetAllRevisions(id);
+        }
+
+        /// <summary>
         /// Gets the id of all pages that have a draft for
         /// the specified site.
         /// </summary>
