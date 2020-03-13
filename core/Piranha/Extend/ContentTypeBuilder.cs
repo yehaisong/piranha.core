@@ -81,97 +81,97 @@ namespace Piranha.Extend
             if (attr != null)
             {
                 if (string.IsNullOrWhiteSpace(attr.Id))
-                    attr.Id = type.Name;
-
-                if (!string.IsNullOrEmpty(attr.Id) && !string.IsNullOrEmpty(attr.Title))
                 {
-                    var contentType = new ContentType
-                    {
-                        Id = attr.Id,
-                        TypeName = type.FullName,
-                        AssemblyName = type.Assembly.GetName().Name,
-                        Title = attr.Title,
-                        Group = group.Title,
-                        IsPrimaryContent = group.IsPrimaryContent
-                    };
+                    attr.Id = type.Name;
+                }
 
-                    // Get all page routes
-                    var routes = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeRouteAttribute));
-                    foreach (ContentTypeRouteAttribute route in routes)
-                    {
-                        if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
-                            contentType.Routes.Add(new ContentTypeRoute
-                            {
-                                Title = route.Title,
-                                Route = route.Route
-                            });
-                    }
+                if (string.IsNullOrWhiteSpace(attr.Title))
+                {
+                    attr.Title = attr.Id;
+                }
 
-                    // Add default route if there were no defined ones
-                    if (contentType.Routes.Count == 0)
-                    {
+                var contentType = new ContentType
+                {
+                    Id = attr.Id,
+                    TypeName = type.FullName,
+                    AssemblyName = type.Assembly.GetName().Name,
+                    Title = attr.Title,
+                    Group = group.Title,
+                    IsPrimaryContent = group.IsPrimaryContent
+                };
+
+                // Get all page routes
+                var routes = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeRouteAttribute));
+                foreach (ContentTypeRouteAttribute route in routes)
+                {
+                    if (!string.IsNullOrWhiteSpace(route.Title) && !string.IsNullOrWhiteSpace(route.Route))
                         contentType.Routes.Add(new ContentTypeRoute
                         {
-                            Title = "Default",
-                            Route = group.DefaultRoute
+                            Title = route.Title,
+                            Route = route.Route
                         });
-                    }
-
-                    // Get all custom editors
-                    var editors = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeEditorAttribute));
-                    foreach (ContentTypeEditorAttribute editor in editors)
-                    {
-                        if (!string.IsNullOrWhiteSpace(editor.Component) && !string.IsNullOrWhiteSpace(editor.Title))
-                        {
-                            // Check if we already have an editor registered with this name
-                            var current = contentType.CustomEditors.FirstOrDefault(e => e.Title == editor.Title);
-
-                            if (current != null)
-                            {
-                                // Replace current editor
-                                current.Component = editor.Component;
-                                current.Icon = editor.Icon;
-                                current.Title = editor.Title;
-                            }
-                            else
-                            {
-                                // Add new editor
-                                contentType.CustomEditors.Add(new ContentTypeEditor
-                                {
-                                    Component = editor.Component,
-                                    Icon = editor.Icon,
-                                    Title = editor.Title
-                                });
-                            }
-                        }
-                    }
-
-                    // Get all regions
-                    var regionTypes = new List<Tuple<int?, ContentTypeRegion>>();
-                    foreach (var prop in type.GetProperties(App.PropertyBindings))
-                    {
-                        var regionType = GetRegionType(prop);
-
-                        if (regionType != null)
-                        {
-                            regionTypes.Add(regionType);
-                        }
-                    }
-                    regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
-
-                    // First add sorted regions
-                    foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
-                        contentType.Regions.Add(regionType.Item2);
-                    // Then add the unsorted regions
-                    foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
-                        contentType.Regions.Add(regionType.Item2);
-
-                    return contentType;
                 }
-            }
-            else
-            {
-                throw new ArgumentException($"Title is mandatory in ContentTypeAttribute. No title provided for { type.Name }");
+
+                // Add default route if there were no defined ones
+                if (contentType.Routes.Count == 0)
+                {
+                    contentType.Routes.Add(new ContentTypeRoute
+                    {
+                        Title = "Default",
+                        Route = group.DefaultRoute
+                    });
+                }
+
+                // Get all custom editors
+                var editors = type.GetTypeInfo().GetCustomAttributes(typeof(ContentTypeEditorAttribute));
+                foreach (ContentTypeEditorAttribute editor in editors)
+                {
+                    if (!string.IsNullOrWhiteSpace(editor.Component) && !string.IsNullOrWhiteSpace(editor.Title))
+                    {
+                        // Check if we already have an editor registered with this name
+                        var current = contentType.CustomEditors.FirstOrDefault(e => e.Title == editor.Title);
+
+                        if (current != null)
+                        {
+                            // Replace current editor
+                            current.Component = editor.Component;
+                            current.Icon = editor.Icon;
+                            current.Title = editor.Title;
+                        }
+                        else
+                        {
+                            // Add new editor
+                            contentType.CustomEditors.Add(new ContentTypeEditor
+                            {
+                                Component = editor.Component,
+                                Icon = editor.Icon,
+                                Title = editor.Title
+                            });
+                        }
+                    }
+                }
+
+                // Get all regions
+                var regionTypes = new List<Tuple<int?, ContentTypeRegion>>();
+                foreach (var prop in type.GetProperties(App.PropertyBindings))
+                {
+                    var regionType = GetRegionType(prop);
+
+                    if (regionType != null)
+                    {
+                        regionTypes.Add(regionType);
+                    }
+                }
+                regionTypes = regionTypes.OrderBy(t => t.Item1).ToList();
+
+                // First add sorted regions
+                foreach (var regionType in regionTypes.Where(t => t.Item1.HasValue))
+                    contentType.Regions.Add(regionType.Item2);
+                // Then add the unsorted regions
+                foreach (var regionType in regionTypes.Where(t => !t.Item1.HasValue))
+                    contentType.Regions.Add(regionType.Item2);
+
+                return contentType;
             }
             return null;
         }

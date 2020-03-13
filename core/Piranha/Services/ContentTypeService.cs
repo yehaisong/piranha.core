@@ -98,6 +98,24 @@ namespace Piranha.Services
             var context = new ValidationContext(model);
             Validator.ValidateObject(model, context, true);
 
+            // Validate regions
+            foreach (var region in model.Regions)
+            {
+                var regionContext = new ValidationContext(region);
+                Validator.ValidateObject(region, regionContext, true);
+
+                // Validate fields
+                foreach (var field in region.Fields)
+                {
+                    var fieldContext = new ValidationContext(field);
+                    Validator.ValidateObject(field, fieldContext, true);
+
+                    // Validate field type
+                    var typeContext = new ValidationContext(field.Type);
+                    Validator.ValidateObject(field.Type, typeContext, true);
+                }
+            }
+
             // Call hooks & save
             App.Hooks.OnBeforeSave(model);
             await _repo.SaveAsync(model).ConfigureAwait(false);

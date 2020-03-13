@@ -30,19 +30,17 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the type name of the content model.
         /// </summary>
-        [Required]
         [StringLength(255)]
         public string TypeName { get; set; }
 
         /// <summary>
         /// Gets/sets the short assembly name of the content model.
         /// </summary>
-        [Required]
         [StringLength(255)]
         public string AssemblyName { get; set; }
 
         /// <summary>
-        /// Gets/sets the optional title.
+        /// Gets/sets the display title.
         /// </summary>
         [Required]
         [StringLength(128)]

@@ -50,6 +50,25 @@ namespace Piranha.Runtime
         {
             return this.FirstOrDefault(t => t.Id == id);
         }
+
+        /// <summary>
+        /// Gets the content types for the specified group.
+        /// </summary>
+        /// <param name="group">The group</param>
+        /// <returns>The available content types</returns>
+        public IEnumerable<ContentType> GetByGroup(string group)
+        {
+            return this.Where(t => t.Group == group);
+        }
+
+        /// <summary>
+        /// Gets the available content groups.
+        /// </summary>
+        /// <returns>The available content groups</returns>
+        public IEnumerable<string> GetGroups()
+        {
+            return this.Select(t => t.Group).Distinct();
+        }
     }
 
     public sealed class ContentTypeList<T> : List<T> where T : ContentTypeBase

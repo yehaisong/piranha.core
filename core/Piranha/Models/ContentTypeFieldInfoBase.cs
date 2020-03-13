@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
@@ -18,11 +19,13 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the type name.
         /// </summary>
+        [Required]
         public string TypeName { get; set; }
 
         /// <summary>
         /// Gets/sets the assembly name.
         /// </summary>
+        [Required]
         public string AssemblyName { get; set; }
     }
 }

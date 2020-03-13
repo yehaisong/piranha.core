@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Piranha.Models
 {
@@ -18,6 +19,8 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the id.
         /// </summary>
+        [Required]
+        [StringLength(64)]
         public string Id { get; set; }
 
         /// <summary>
