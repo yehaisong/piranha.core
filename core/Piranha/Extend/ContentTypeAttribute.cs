@@ -24,5 +24,11 @@ namespace Piranha.Extend
         /// Gets/sets the optional title.
         /// </summary>
         public string Title { get; set; }
+
+        /// <summary>
+        /// Gets/sets if blocks should be used. This is only applicable
+        /// if the content type itself implements IBlockContent.
+        /// </summary>
+        public bool UseBlocks { get; set; } = true;
     }
 }

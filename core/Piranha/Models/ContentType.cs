@@ -60,6 +60,22 @@ namespace Piranha.Models
         public bool IsPrimaryContent { get; set; }
 
         /// <summary>
+        /// Gets/sets if blocks should be used.
+        /// </summary>
+        public bool UseBlocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the content type can be
+        /// categorized.
+        /// </summary>
+        public bool HasCategory { get; set; }
+
+        /// <summary>
+        /// Gets/sets if the content type has tags.
+        /// </summary>
+        public bool HasTags { get; set; }
+
+        /// <summary>
         /// Gets/sets the available regions.
         /// </summary>
         public IList<ContentTypeRegion> Regions { get; set; } = new List<ContentTypeRegion>();

@@ -97,7 +97,10 @@ namespace Piranha.Extend
                     AssemblyName = type.Assembly.GetName().Name,
                     Title = attr.Title,
                     Group = group.Title,
-                    IsPrimaryContent = group.IsPrimaryContent
+                    IsPrimaryContent = group.IsPrimaryContent,
+                    UseBlocks = typeof(IBlockContent).IsAssignableFrom(type) && attr.UseBlocks,
+                    HasCategory = typeof(ICategorizedContent).IsAssignableFrom(type),
+                    HasTags = typeof(ITaggedContent).IsAssignableFrom(type)
                 };
 
                 // Get all page routes
