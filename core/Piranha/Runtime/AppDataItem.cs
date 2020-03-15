@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2017 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -18,6 +18,11 @@ namespace Piranha.Runtime
     public class AppDataItem
     {
         /// <summary>
+        /// Gets/sets the type id.
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
         /// Gets/sets the type.
         /// </summary>
         public Type Type { get; set; }
@@ -26,10 +31,5 @@ namespace Piranha.Runtime
         /// Gets/sets the full type name.
         /// </summary>
         public string TypeName { get; set; }
-
-        /// <summary>
-        /// Gets/sets the short assembly name.
-        /// </summary>
-        public string AssemblyName { get; set; }
     }
 }

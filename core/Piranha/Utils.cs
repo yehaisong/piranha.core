@@ -289,5 +289,21 @@ namespace Piranha
                 property.SetValue(instance, value);
             }
         }
+
+        /// <summary>
+        /// Creates an instance of the given field.
+        /// </summary>
+        /// <param name="field">The content type field</param>
+        /// <returns>The created field</returns>
+        public static object CreateInstance(this Models.ContentTypeField field)
+        {
+            var fieldType = App.Fields.GetById(field.Type);
+
+            if (fieldType != null)
+            {
+                return Activator.CreateInstance(fieldType.Type);
+            }
+            return null;
+        }
     }
 }

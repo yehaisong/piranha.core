@@ -20,8 +20,13 @@ namespace Piranha.Models
     /// contain all possible data.
     /// </summary>
     [Serializable]
-    public sealed class DynamicContent : RoutedContent, IDynamicContent, IBlockContent
+    public sealed class DynamicContent : RoutedContent, IDynamicContent, IBlockContent, ICategorizedContent, ITaggedContent
     {
+        /// <summary>
+        /// Gets/sets the category.
+        /// </summary>
+        public Taxonomy Category { get; set; }
+
         /// <summary>
         /// Gets/sets the regions.
         /// </summary>
@@ -31,5 +36,10 @@ namespace Piranha.Models
         /// Gets/sets the available blocks.
         /// </summary>
         public IList<Block> Blocks { get; set; }
+
+        /// <summary>
+        /// Gets/sets the availabel tags.
+        /// </summary>
+        public IList<Taxonomy> Tags { get; set; } = new List<Taxonomy>();
     }
 }

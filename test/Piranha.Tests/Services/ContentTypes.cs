@@ -51,11 +51,7 @@ namespace Piranha.Tests.Services
                             new ContentTypeField
                             {
                                 Id = "Default",
-                                Type = new ContentTypeFieldInfo
-                                {
-                                    TypeName = typeof(HtmlField).FullName,
-                                    AssemblyName = typeof(HtmlField).Assembly.GetName().Name
-                                }
+                                Type = typeof(HtmlField).FullName,
                             }
                         }
                     }
@@ -76,11 +72,7 @@ namespace Piranha.Tests.Services
                             new ContentTypeField
                             {
                                 Id = "Default",
-                                Type = new ContentTypeFieldInfo
-                                {
-                                    TypeName = typeof(TextField).FullName,
-                                    AssemblyName = typeof(TextField).Assembly.GetName().Name
-                                }
+                                Type = typeof(TextField).FullName
                             }
                         }
                     }
@@ -101,11 +93,7 @@ namespace Piranha.Tests.Services
                             new ContentTypeField
                             {
                                 Id = "Default",
-                                Type = new ContentTypeFieldInfo
-                                {
-                                    TypeName = typeof(ImageField).FullName,
-                                    AssemblyName = typeof(ImageField).Assembly.GetName().Name
-                                }
+                                Type = typeof(ImageField).FullName
                             }
                         }
                     }
@@ -126,11 +114,7 @@ namespace Piranha.Tests.Services
                             new ContentTypeField
                             {
                                 Id = "Default",
-                                Type = new ContentTypeFieldInfo
-                                {
-                                    TypeName = typeof(StringField).FullName,
-                                    AssemblyName = typeof(StringField).Assembly.GetName().Name
-                                }
+                                Type = typeof(StringField).FullName
                             }
                         }
                     }
@@ -151,11 +135,7 @@ namespace Piranha.Tests.Services
                             new ContentTypeField
                             {
                                 Id = "Default",
-                                Type = new ContentTypeFieldInfo
-                                {
-                                    TypeName = typeof(TextField).FullName,
-                                    AssemblyName = typeof(TextField).Assembly.GetName().Name
-                                }
+                                Type = typeof(TextField).FullName
                             }
                         }
                     }
@@ -296,11 +276,7 @@ namespace Piranha.Tests.Services
                                 new ContentTypeField
                                 {
                                     Id = "Default",
-                                    Type = new ContentTypeFieldInfo
-                                    {
-                                        TypeName = typeof(ImageField).FullName,
-                                        AssemblyName = typeof(ImageField).Assembly.GetName().Name
-                                    }
+                                    Type = typeof(ImageField).FullName
                                 }
                             }
                         }
@@ -330,11 +306,7 @@ namespace Piranha.Tests.Services
                             {
                                 new ContentTypeField
                                 {
-                                    Type = new ContentTypeFieldInfo
-                                    {
-                                        TypeName = typeof(ImageField).FullName,
-                                        AssemblyName = typeof(ImageField).Assembly.GetName().Name
-                                    }
+                                    Type = typeof(ImageField).FullName
                                 }
                             }
                         }

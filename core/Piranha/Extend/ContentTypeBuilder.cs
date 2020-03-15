@@ -237,10 +237,9 @@ namespace Piranha.Extend
 
                     var fieldType = new ContentTypeField
                     {
-                        Id = "Default"
+                        Id = "Default",
+                        Type = appFieldType.Id
                     };
-                    SetTypeInfo(fieldType, appFieldType);
-
                     regionType.Fields.Add(fieldType);
                 }
                 else
@@ -290,10 +289,9 @@ namespace Piranha.Extend
                         Id = prop.Name,
                         Title = attr.Title,
                         Options = attr.Options,
-                        Placeholder = attr.Placeholder
+                        Placeholder = attr.Placeholder,
+                        Type = appFieldType.Id
                     };
-
-                    SetTypeInfo(fieldType, appFieldType);
 
                     // Get optional description
                     var descAttr = prop.GetCustomAttribute<FieldDescriptionAttribute>();
@@ -305,29 +303,6 @@ namespace Piranha.Extend
                 }
             }
             return null;
-        }
-
-        private void SetTypeInfo(ContentTypeField field, Runtime.AppField fieldType)
-        {
-            // Set basic info
-            field.Type.TypeName = fieldType.TypeName;
-            field.Type.AssemblyName = fieldType.AssemblyName;
-
-            // Handle generic fields
-            if (fieldType.Type.IsGenericType)
-            {
-                field.Type.IsGeneric = true;
-                field.Type.TypeName = $"{ fieldType.Type.Namespace }.{ fieldType.Type.Name }";
-
-                foreach (var arg in fieldType.Type.GenericTypeArguments)
-                {
-                    field.Type.TypeArguments.Add(new ContentTypeFieldInfoBase
-                    {
-                        TypeName = arg.FullName,
-                        AssemblyName = arg.Assembly.GetName().Name
-                    });
-                }
-            }
         }
 
         private void RegisterField(Type type)

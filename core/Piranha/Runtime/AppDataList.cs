@@ -39,7 +39,23 @@ namespace Piranha.Runtime
 
                 item.Type = type;
                 item.TypeName = type.FullName;
-                item.AssemblyName = type.Assembly.GetName().Name;
+
+                if (!type.IsGenericType)
+                {
+                    item.Id = type.FullName;
+                }
+                else {
+                    var args = "";
+                    foreach (var arg in type.GenericTypeArguments)
+                    {
+                        if (args != "")
+                        {
+                            args += ",";
+                        }
+                        args += arg.FullName;
+                    }
+                    item.Id = $"{ type.Namespace }.{ type.Name }<{ args }>";
+                }
 
                 _items.Add(OnRegister<TValue>(item));
             }
@@ -56,6 +72,16 @@ namespace Piranha.Runtime
             {
                 _items.Remove(item);
             }
+        }
+
+        /// <summary>
+        /// Gets a single item by its type id.
+        /// </summary>
+        /// <param name="id">The type id</param>
+        /// <returns>The item, null if not found</returns>
+        public virtual TItem GetById(string id)
+        {
+            return _items.SingleOrDefault(i => i.Id == id);
         }
 
         /// <summary>

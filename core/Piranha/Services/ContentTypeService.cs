@@ -109,10 +109,6 @@ namespace Piranha.Services
                 {
                     var fieldContext = new ValidationContext(field);
                     Validator.ValidateObject(field, fieldContext, true);
-
-                    // Validate field type
-                    var typeContext = new ValidationContext(field.Type);
-                    Validator.ValidateObject(field.Type, typeContext, true);
                 }
             }
 

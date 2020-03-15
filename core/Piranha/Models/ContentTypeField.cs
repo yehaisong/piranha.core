@@ -29,9 +29,10 @@ namespace Piranha.Models
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets/sets the type information.
+        /// Gets/sets the type id.
         /// </summary>
-        public ContentTypeFieldInfo Type { get; set; } = new ContentTypeFieldInfo();
+        [Required]
+        public string Type { get; set; }
 
         /// <summary>
         /// Gets/sets the options.

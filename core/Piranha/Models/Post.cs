@@ -21,12 +21,11 @@ namespace Piranha.Models
     /// </summary>
     [Serializable]
     [ContentGroup(Title = "Post", DefaultRoute = "/post", IsPrimaryContent = false)]
-    public abstract class Post : RoutedContent, IBlockContent
+    public abstract class Post : RoutedContent, IBlockContent, ICategorizedContent, ITaggedContent
     {
         /// <summary>
         /// Gets/sets the category.
         /// </summary>
-        [Required]
         public Taxonomy Category { get; set; }
 
         /// <summary>
