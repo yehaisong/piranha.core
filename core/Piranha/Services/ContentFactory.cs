@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019-2020 Håkan Edling
+ * Copyright (c) 2020 Piranha CMS
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -24,7 +24,7 @@ namespace Piranha.Services
     /// The content factory is responsible for creating models and
     /// initializing them after they have been loaded.
     /// </summary>
-    public sealed class ContentFactory
+    public sealed class ContentFactory : IContentFactory
     {
         private readonly IServiceProvider _services;
 
@@ -144,26 +144,51 @@ namespace Piranha.Services
         /// <param name="type">The content type</param>
         /// <typeparam name="T">The model type</typeparam>
         /// <returns>The initialized model</returns>
-        public async Task<T> InitDynamicAsync<T>(T model, ContentType type) where T : IDynamicContent
+        public async Task<T> InitAsync<T>(T model, ContentType type) where T : Content
         {
             using (var scope = _services.CreateScope())
             {
                 foreach (var regionType in type.Regions)
                 {
-                    // Try to get the region from the model
-                    if (((IDictionary<string, object>)model.Regions).TryGetValue(regionType.Id, out var region))
+                    if (model is IDynamicContent dynamicModel)
                     {
-                        if (!regionType.Collection)
+                        // Try to get the region from the model
+                        if (((IDictionary<string, object>)dynamicModel.Regions).TryGetValue(regionType.Id, out var region))
                         {
-                            // Initialize it
-                            await InitDynamicRegionAsync(scope, region, regionType).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            // This region was a collection. Initialize all items
-                            foreach (var item in (IList)region)
+                            if (!regionType.Collection)
                             {
-                                await InitDynamicRegionAsync(scope, item, regionType).ConfigureAwait(false);
+                                // Initialize it
+                                await InitDynamicRegionAsync(scope, region, regionType).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                // This region was a collection. Initialize all items
+                                foreach (var item in (IList)region)
+                                {
+                                    await InitDynamicRegionAsync(scope, item, regionType).ConfigureAwait(false);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Try to get the region from the model
+                        var region = model.GetType().GetPropertyValue(regionType.Id, model);
+
+                        if (region != null)
+                        {
+                            if (!regionType.Collection)
+                            {
+                                // Initialize it
+                                await InitRegionAsync(scope, region, regionType).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                // This region was a collection. Initialize all items
+                                foreach (var item in (IList)region)
+                                {
+                                    await InitRegionAsync(scope, item, regionType).ConfigureAwait(false);
+                                }
                             }
                         }
                     }
@@ -178,64 +203,6 @@ namespace Piranha.Services
                         if (block is BlockGroup blockGroup)
                         {
                             foreach (var child in blockGroup.Items)
-                            {
-                                await InitBlockAsync(scope, child).ConfigureAwait(false);
-                            }
-                        }
-                    }
-                }
-            }
-            return model;
-        }
-
-        /// <summary>
-        /// Initializes the given model.
-        /// </summary>
-        /// <param name="model">The model</param>
-        /// <param name="type">The content type</param>
-        /// <typeparam name="T">The model type</typeparam>
-        /// <returns>The initialized model</returns>
-        public async Task<T> InitAsync<T>(T model, ContentType type) where T : Content
-        {
-            if (model is IDynamicContent)
-            {
-                throw new ArgumentException("For dynamic models InitDynamic should be used.");
-            }
-
-            using (var scope = _services.CreateScope())
-            {
-                foreach (var regionType in type.Regions)
-                {
-                    // Try to get the region from the model
-                    var region = model.GetType().GetPropertyValue(regionType.Id, model);
-
-                    if (region != null)
-                    {
-                        if (!regionType.Collection)
-                        {
-                            // Initialize it
-                            await InitRegionAsync(scope, region, regionType).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            // This region was a collection. Initialize all items
-                            foreach (var item in (IList)region)
-                            {
-                                await InitRegionAsync(scope, item, regionType).ConfigureAwait(false);
-                            }
-                        }
-                    }
-                }
-
-                if (!(model is IContentInfo) && model is IBlockContent blockModel)
-                {
-                    foreach (var block in blockModel.Blocks)
-                    {
-                        await InitBlockAsync(scope, block).ConfigureAwait(false);
-
-                        if (block is Extend.BlockGroup)
-                        {
-                            foreach (var child in ((Extend.BlockGroup)block).Items)
                             {
                                 await InitBlockAsync(scope, child).ConfigureAwait(false);
                             }

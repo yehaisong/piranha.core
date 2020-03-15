@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018-2019 Håkan Edling
+ * Copyright (c) 2018-2020 Piranha CMS
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -21,7 +21,7 @@ public static class PiranhaExtensions
     public static IServiceCollection AddPiranha(this IServiceCollection services,
         ServiceLifetime scope = ServiceLifetime.Scoped)
     {
-        services.Add(new ServiceDescriptor(typeof(ContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
+        services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(ILegacyContentFactory), typeof(LegacyContentFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IApi), typeof(Api), scope));
 
