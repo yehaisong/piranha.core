@@ -42,7 +42,6 @@ namespace Piranha.Tests.Repositories
         private const string SITE_5 = "MyFifthSite";
         private const string SITE_6 = "MySixthSite";
         private const string SITE_1_HOSTS = "mysite.com";
-        protected ICache cache;
 
         private readonly Guid SITE_1_ID = Guid.NewGuid();
 
@@ -608,31 +607,6 @@ namespace Piranha.Tests.Repositories
 
                 Assert.Null(model);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new ContentTypeRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

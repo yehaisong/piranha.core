@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2016-2018 Håkan Edling
+ * Copyright (c) 2016-2020 Håkan Edling
  *
  * This software may be modified and distributed under the terms
  * of the MIT license.  See the LICENSE file for details.
@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 namespace Piranha.Extend.Fields
 {
     [FieldType(Name = "Html", Shorthand = "Html", Component = "html-field")]
-    public class HtmlField : SimpleField<string>, ISearchable
+    public class HtmlField : SimpleField<string>, ISearchable, ITranslatable
     {
         /// <summary>
         /// Implicit operator for converting a string to a field.

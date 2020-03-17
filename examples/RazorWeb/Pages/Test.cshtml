@@ -1,0 +1,15 @@
+@page
+@{
+    Layout = null;
+
+    var groups = Piranha.App.ContentGroups;
+    var types = Piranha.App.ContentTypes;
+}
+
+<h2>Content Groups</h2>
+
+<pre>@Newtonsoft.Json.JsonConvert.SerializeObject(groups)</pre>
+
+<h2>Content Types</h2>
+
+<pre>@Newtonsoft.Json.JsonConvert.SerializeObject(types)</pre>

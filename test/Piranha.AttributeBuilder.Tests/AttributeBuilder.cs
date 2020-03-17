@@ -212,14 +212,18 @@ namespace Piranha.AttributeBuilder.Tests
         private IApi CreateApi()
         {
             var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
+            var contentFactory = new ContentFactory(services);
+            var serviceFactory = new LegacyContentServiceFactory(factory);
 
             var db = GetDb();
 
             return new Api(
                 factory,
+                contentFactory,
                 new AliasRepository(db),
                 new ArchiveRepository(db),
+                new ContentRepository(db, new TransformationService(contentFactory)),
+                new ContentGroupRepository(db),
                 new ContentTypeRepository(db),
                 new MediaRepository(db),
                 new PageRepository(db, serviceFactory),

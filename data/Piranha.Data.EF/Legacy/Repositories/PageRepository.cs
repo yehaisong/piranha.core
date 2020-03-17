@@ -22,14 +22,14 @@ namespace Piranha.Repositories
     public class PageRepository : IPageRepository
     {
         private readonly IDb _db;
-        private readonly IContentService<Page, PageField, Models.PageBase> _contentService;
+        private readonly ILegacyContentService<Page, PageField, Models.PageBase> _contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="factory">The content service factory</param>
-        public PageRepository(IDb db, IContentServiceFactory factory)
+        public PageRepository(IDb db, ILegacyContentServiceFactory factory)
         {
             _db = db;
             _contentService = factory.CreatePageService();

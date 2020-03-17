@@ -35,6 +35,16 @@ namespace Piranha
         public IArchiveService Archives { get; }
 
         /// <summary>
+        /// Gets/sets the content service.
+        /// </summary>
+        public IContentService Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content group repository.
+        /// </summary>
+        public IContentGroupService ContentGroups { get; set; }
+
+        /// <summary>
         /// Gets/sets the content type service.
         /// </summary>
         public IContentTypeService ContentTypes { get; set; }
@@ -90,9 +100,12 @@ namespace Piranha
         /// repositories.
         /// </summary>
         public Api(
-            ILegacyContentFactory contentFactory,
+            ILegacyContentFactory legacyContentFactory,
+            IContentFactory contentFactory,
             IAliasRepository aliasRepository,
             IArchiveRepository archiveRepository,
+            IContentRepository contentRepository,
+            IContentGroupRepository contentGroupRepository,
             IContentTypeRepository contentTypeRepository,
             IMediaRepository mediaRepository,
             IPageRepository pageRepository,
@@ -112,17 +125,19 @@ namespace Piranha
 
             // Create services without dependecies
             ContentTypes = new ContentTypeService(contentTypeRepository, cache);
+            ContentGroups = new ContentGroupService(contentGroupRepository, cache);
             PageTypes = new PageTypeService(pageTypeRepository, cache);
             Params = new ParamService(paramRepository, cache);
             PostTypes = new PostTypeService(postTypeRepository, cache);
-            Sites = new SiteService(siteRepository, contentFactory, cache);
+            Sites = new SiteService(siteRepository, legacyContentFactory, cache);
             SiteTypes = new SiteTypeService(siteTypeRepository, cache);
 
             // Create services with dependencies
             Aliases = new AliasService(aliasRepository, Sites, cache);
+            Content = new ContentService(contentRepository, contentFactory, cache, search);
             Media = new MediaService(mediaRepository, Params, storage, processor, cache);
-            Pages = new PageService(pageRepository, contentFactory, Sites, Params, cache, search);
-            Posts = new PostService(postRepository, contentFactory, Sites, Pages, Params, Media, cache, search);
+            Pages = new PageService(pageRepository, legacyContentFactory, Sites, Params, cache, search);
+            Posts = new PostService(postRepository, legacyContentFactory, Sites, Pages, Params, Media, cache, search);
             Archives = new ArchiveService(archiveRepository, Params, Posts);
         }
 

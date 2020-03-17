@@ -45,7 +45,6 @@ namespace Piranha.Tests.Repositories
         public readonly Guid PAGE_7_ID = Guid.NewGuid();
         public readonly Guid PAGE_8_ID = Guid.NewGuid();
         public readonly Guid PAGE_DI_ID = Guid.NewGuid();
-        protected ICache cache;
 
         public interface IMyService
         {
@@ -1094,31 +1093,6 @@ namespace Piranha.Tests.Repositories
                 });
                 Assert.Equal("Can not delete page because it has copies", exn.Message);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new ContentTypeRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

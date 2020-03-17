@@ -55,6 +55,15 @@ namespace RazorWeb
                 .Build()
                 .DeleteOrphans();
 
+            new Piranha.Extend.ContentTypeBuilder(api)
+                .AddType(typeof(Piranha.Models.Archive))
+                .AddType(typeof(Piranha.Models.Page))
+                .AddType(typeof(Piranha.Models.Post))
+                .AddType(typeof(Models.Content.BasicArchive))
+                .AddType(typeof(Models.Content.BasicPage))
+                .AddType(typeof(Models.Content.BasicPost))
+                .Build();
+
             // Configure editor
             Piranha.Manager.Editor.EditorConfig.FromFile("editorconfig.json");
 

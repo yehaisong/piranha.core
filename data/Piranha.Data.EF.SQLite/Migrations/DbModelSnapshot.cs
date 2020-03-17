@@ -150,6 +150,222 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.ToTable("Piranha_Categories");
                 });
 
+            modelBuilder.Entity("Piranha.Data.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("CloseCommentsAfterDays")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("EnableComments")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("Published")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("RedirectType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("RedirectUrl")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Route")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("TypeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Content");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FieldId")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("RegionId")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<int>("SortOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TypeId")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId", "RegionId", "FieldId", "SortOrder");
+
+                    b.ToTable("Piranha_ContentFields");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
+                {
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("FieldId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.ToTable("Piranha_ContentFieldTranslations");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentGroup", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("AssemblyName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsPrimaryContent")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsRoutedContent")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("LastModified")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(255);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_ContentGroups");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentGroupType", b =>
+                {
+                    b.Property<string>("GroupId")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("TypeId")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("GroupId", "TypeId");
+
+                    b.ToTable("Piranha_ContentGroupTypes");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentRevision", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ContentId");
+
+                    b.ToTable("Piranha_ContentRevisions");
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
+                {
+                    b.Property<Guid>("ContentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("LanguageId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MetaDescription")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("MetaKeywords")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("MetaTitle")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("NavigationTitle")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(128);
+
+                    b.HasKey("ContentId", "LanguageId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Piranha_ContentTranslations");
+                });
+
             modelBuilder.Entity("Piranha.Data.ContentType", b =>
                 {
                     b.Property<string>("Id")
@@ -172,6 +388,31 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Piranha_ContentTypes");
+                });
+
+            modelBuilder.Entity("Piranha.Data.Language", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Culture")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(6);
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(64);
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Piranha_Languages");
                 });
 
             modelBuilder.Entity("Piranha.Data.Media", b =>
@@ -1016,6 +1257,63 @@ namespace Piranha.Data.EF.SQLite.Migrations
                     b.HasOne("Piranha.Data.Page", "Blog")
                         .WithMany()
                         .HasForeignKey("BlogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentField", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", null)
+                        .WithMany("Fields")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentFieldTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentField", "Field")
+                        .WithMany("Translations")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentGroupType", b =>
+                {
+                    b.HasOne("Piranha.Data.ContentGroup", "Group")
+                        .WithMany("ChildGroups")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentRevision", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany()
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Piranha.Data.ContentTranslation", b =>
+                {
+                    b.HasOne("Piranha.Data.Content", "Content")
+                        .WithMany("Translations")
+                        .HasForeignKey("ContentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Piranha.Data.Language", "Language")
+                        .WithMany()
+                        .HasForeignKey("LanguageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

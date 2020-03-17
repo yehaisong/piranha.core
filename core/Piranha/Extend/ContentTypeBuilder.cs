@@ -52,11 +52,22 @@ namespace Piranha.Extend
         {
             foreach (var type in _types)
             {
-                var contentType = GetContentType(type);
-
-                if (contentType != null)
+                if (type.GetCustomAttribute<ContentGroupAttribute>(false) != null)
                 {
-                    await _api.ContentTypes.SaveAsync(contentType);
+                    var contentGroup = GetContentGroup(type);
+                    if (contentGroup != null)
+                    {
+                        await _api.ContentGroups.SaveAsync(contentGroup);
+                    }
+                }
+
+                if (type.GetCustomAttribute<ContentTypeAttribute>() != null)
+                {
+                    var contentType = GetContentType(type);
+                    if (contentType != null)
+                    {
+                        await _api.ContentTypes.SaveAsync(contentType);
+                    }
                 }
             }
             return this;
@@ -64,13 +75,50 @@ namespace Piranha.Extend
         }
 
         /// <summary>
-        /// Gets the possible content type for the given type.
+        /// Gets the content group for the given type.
+        /// </summary>
+        /// <param name="type">The type</param>
+        /// <returns>The content group</returns>
+        private ContentGroup GetContentGroup(Type type)
+        {
+            var attr = type.GetCustomAttribute<ContentGroupAttribute>();
+
+            if (attr != null)
+            {
+                // Create the content group
+                var contentGroup = new ContentGroup
+                {
+                    Id = attr.Id,
+                    Title = attr.Title,
+                    IsPrimaryContent = attr.IsPrimaryContent,
+                    IsRoutedContent = typeof(RoutedContent).IsAssignableFrom(type),
+                    TypeName = type.FullName,
+                    AssemblyName = type.Assembly.GetName().Name
+                };
+
+                // Get the defined child types
+                var childTypes = type.GetCustomAttributes(typeof(ContentGroupChildAttribute));
+                foreach (ContentGroupChildAttribute child in childTypes)
+                {
+                    var childAttr = child.Type.GetCustomAttribute<ContentGroupAttribute>(false);
+                    if (childAttr != null)
+                    {
+                        contentGroup.ChildGroups.Add(childAttr.Id);
+                    }
+                }
+                return contentGroup;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the content type for the given type.
         /// </summary>
         /// <param name="type">The type</param>
         /// <returns>The content type</returns>
         private ContentType GetContentType(Type type)
         {
-            var group = type.GetCustomAttribute<ContentGroupAttribute>(true);
+            var group = type.GetCustomAttribute<ContentGroupAttribute>();
             if (group == null)
             {
                 throw new ArgumentException($"Content Group is missing for the Content Type { type.Name }");
@@ -80,23 +128,13 @@ namespace Piranha.Extend
 
             if (attr != null)
             {
-                if (string.IsNullOrWhiteSpace(attr.Id))
-                {
-                    attr.Id = type.Name;
-                }
-
-                if (string.IsNullOrWhiteSpace(attr.Title))
-                {
-                    attr.Title = attr.Id;
-                }
-
                 var contentType = new ContentType
                 {
                     Id = attr.Id,
                     TypeName = type.FullName,
                     AssemblyName = type.Assembly.GetName().Name,
                     Title = attr.Title,
-                    Group = group.Title,
+                    Group = group.Id,
                     IsPrimaryContent = group.IsPrimaryContent,
                     UseBlocks = typeof(IBlockContent).IsAssignableFrom(type) && attr.UseBlocks,
                     HasCategory = typeof(ICategorizedContent).IsAssignableFrom(type),

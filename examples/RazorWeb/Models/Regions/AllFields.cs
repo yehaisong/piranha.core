@@ -19,6 +19,8 @@ namespace RazorWeb.Models.Regions
     /// </summary>
     public class AllFields
     {
+        public class CustomStringField : StringField { }
+
         public enum StyleType
         {
             Standard,
@@ -71,5 +73,8 @@ namespace RazorWeb.Models.Regions
 
         [Field]
         public SelectField<StyleType> Style { get; set; }
+
+        [Field(Title = "Custom String Field")]
+        public CustomStringField CustomField { get; set; }
     }
 }

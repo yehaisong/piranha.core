@@ -28,6 +28,14 @@ namespace Piranha.Services
         Task<T> CreateAsync<T>(ContentType type) where T : Content;
 
         /// <summary>
+        /// Creates a new dynamic region.
+        /// </summary>
+        /// <param name="type">The content type</param>
+        /// <param name="regionId">The region id</param>
+        /// <returns>The new region value</returns>
+        Task<object> CreateDynamicRegionAsync(ContentType type, string regionId);
+
+        /// <summary>
         /// Initializes the given model.
         /// </summary>
         /// <param name="model">The model</param>

@@ -84,6 +84,11 @@ namespace Piranha
         private IMarkdown _markdown;
 
         /// <summary>
+        /// The currently available content groups.
+        /// </summary>
+        private readonly ContentGroupList _contentGroups;
+
+        /// <summary>
         /// The currently available content types.
         /// </summary>
         private readonly ContentTypeList _contentTypes;
@@ -158,6 +163,11 @@ namespace Piranha
             get => Instance._cacheLevel;
             set => Instance._cacheLevel = value;
         }
+
+        /// <summary>
+        /// Gets the currently available content groups.
+        /// </summary>
+        public static ContentGroupList ContentGroups => Instance._contentGroups;
 
         /// <summary>
         /// Gets the currently available content types.
@@ -271,6 +281,7 @@ namespace Piranha
             _serializers = new SerializerManager();
             _hooks = new HookManager();
             _permissions = new PermissionManager();
+            _contentGroups = new ContentGroupList();
             _contentTypes = new ContentTypeList();
             _pageTypes = new ContentTypeList<Models.PageType>();
             _postTypes = new ContentTypeList<Models.PostType>();
@@ -328,6 +339,7 @@ namespace Piranha
                     if (!_isInitialized)
                     {
                         // Initialize content types
+                        _contentGroups.Init(api.ContentGroups.GetAllAsync().GetAwaiter().GetResult());
                         _contentTypes.Init(api.ContentTypes.GetAllAsync().GetAwaiter().GetResult());
                         _pageTypes.Init(api.PageTypes.GetAllAsync().GetAwaiter().GetResult());
                         _postTypes.Init(api.PostTypes.GetAllAsync().GetAwaiter().GetResult());

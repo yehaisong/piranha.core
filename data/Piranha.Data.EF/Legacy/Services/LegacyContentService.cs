@@ -20,7 +20,7 @@ using Piranha.Models;
 
 namespace Piranha.Services
 {
-    public class ContentService<TContent, TField, TModelBase> : IContentService<TContent, TField, TModelBase>
+    public class LegacyContentService<TContent, TField, TModelBase> : ILegacyContentService<TContent, TField, TModelBase>
         where TContent : ContentBase<TField>
         where TField : ContentFieldBase
         where TModelBase : ContentBase
@@ -35,7 +35,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="factory">The content factory</param>
         /// <param name="mapper">The AutoMapper instance to use</param>
-        public ContentService(ILegacyContentFactory factory, IMapper mapper)
+        public LegacyContentService(ILegacyContentFactory factory, IMapper mapper)
         {
             _factory = factory;
             _mapper = mapper;

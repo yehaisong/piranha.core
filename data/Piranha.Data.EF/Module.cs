@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Linq;
 using AutoMapper;
 using Piranha.Extend;
 
@@ -65,6 +66,84 @@ namespace Piranha.Data.EF
                     .ForMember(c => c.Id, o => o.Ignore())
                     .ForMember(c => c.Created, o => o.Ignore());
                 cfg.CreateMap<Data.Category, Models.Taxonomy>();
+
+                cfg.CreateMap<Data.Content, Models.Content>()
+                    .ForMember(c => c.Title, o => o.Ignore())
+                    .ForMember(c => c.CommentCount, o => o.Ignore())
+                    .ForMember(c => c.Permissions, o => o.Ignore());
+                cfg.CreateMap<Models.Content, Data.Content>()
+                    .ForMember(c => c.Route, o => o.Ignore())
+                    .ForMember(c => c.RedirectType, o => o.Ignore())
+                    .ForMember(c => c.RedirectUrl, o => o.Ignore())
+                    .ForMember(c => c.Created, o => o.Ignore())
+                    .ForMember(c => c.LastModified, o => o.Ignore())
+                    .ForMember(c => c.Fields, o => o.Ignore())
+                    .ForMember(c => c.Translations, o => o.Ignore());
+
+                cfg.CreateMap<Data.Content, Models.RoutedContent>()
+                    .ForMember(c => c.Title, o => o.Ignore())
+                    .ForMember(c => c.NavigationTitle, o => o.Ignore())
+                    .ForMember(c => c.Slug, o => o.Ignore())
+                    .ForMember(c => c.MetaTitle, o => o.Ignore())
+                    .ForMember(c => c.MetaKeywords, o => o.Ignore())
+                    .ForMember(c => c.MetaDescription, o => o.Ignore())
+                    .ForMember(c => c.CommentCount, o => o.Ignore())
+                    .ForMember(c => c.Route, o => o.Ignore())
+                    .ForMember(c => c.Permissions, o => o.Ignore());
+                cfg.CreateMap<Models.RoutedContent, Data.Content>()
+                    .ForMember(c => c.Created, o => o.Ignore())
+                    .ForMember(c => c.LastModified, o => o.Ignore())
+                    .ForMember(c => c.Fields, o => o.Ignore())
+                    .ForMember(c => c.Translations, o => o.Ignore());
+
+                cfg.CreateMap<Data.ContentTranslation, Models.Content>()
+                    .ForMember(c => c.Id, o => o.Ignore())
+                    .ForMember(c => c.TypeId, o => o.Ignore())
+                    .ForMember(c => c.EnableComments, o => o.Ignore())
+                    .ForMember(c => c.CloseCommentsAfterDays, o => o.Ignore())
+                    .ForMember(c => c.CommentCount, o => o.Ignore())
+                    .ForMember(c => c.Created, o => o.Ignore())
+                    .ForMember(c => c.LastModified, o => o.Ignore())
+                    .ForMember(c => c.Published, o => o.Ignore())
+                    .ForMember(c => c.Permissions, o => o.Ignore());
+                cfg.CreateMap<Models.Content, Data.ContentTranslation>()
+                    .ForMember(c => c.ContentId, o => o.Ignore())
+                    .ForMember(c => c.LanguageId, o => o.Ignore())
+                    .ForMember(c => c.NavigationTitle, o => o.Ignore())
+                    .ForMember(c => c.Slug, o => o.Ignore())
+                    .ForMember(c => c.MetaTitle, o => o.Ignore())
+                    .ForMember(c => c.MetaKeywords, o => o.Ignore())
+                    .ForMember(c => c.MetaDescription, o => o.Ignore())
+                    .ForMember(c => c.Content, o => o.Ignore())
+                    .ForMember(c => c.Language, o => o.Ignore());
+
+                cfg.CreateMap<Data.ContentTranslation, Models.RoutedContent>()
+                    .ForMember(c => c.Id, o => o.Ignore())
+                    .ForMember(c => c.TypeId, o => o.Ignore())
+                    .ForMember(c => c.EnableComments, o => o.Ignore())
+                    .ForMember(c => c.CloseCommentsAfterDays, o => o.Ignore())
+                    .ForMember(c => c.CommentCount, o => o.Ignore())
+                    .ForMember(c => c.MetaTitle, o => o.Ignore())
+                    .ForMember(c => c.Route, o => o.Ignore())
+                    .ForMember(c => c.RedirectUrl, o => o.Ignore())
+                    .ForMember(c => c.RedirectType, o => o.Ignore())
+                    .ForMember(c => c.Created, o => o.Ignore())
+                    .ForMember(c => c.LastModified, o => o.Ignore())
+                    .ForMember(c => c.Published, o => o.Ignore())
+                    .ForMember(c => c.Permissions, o => o.Ignore());
+                cfg.CreateMap<Models.RoutedContent, Data.ContentTranslation>()
+                    .ForMember(c => c.ContentId, o => o.Ignore())
+                    .ForMember(c => c.LanguageId, o => o.Ignore())
+                    .ForMember(c => c.Content, o => o.Ignore())
+                    .ForMember(c => c.Language, o => o.Ignore());
+
+                cfg.CreateMap<Models.ContentGroup, Data.ContentGroup>()
+                    .ForMember(g => g.Created, o => o.Ignore())
+                    .ForMember(g => g.LastModified, o => o.Ignore())
+                    .ForMember(g => g.ChildGroups, o => o.Ignore());
+                cfg.CreateMap<Data.ContentGroup, Models.ContentGroup>()
+                    .ForMember(g => g.ChildGroups, o => o.MapFrom(m => m.ChildGroups.Select(t => t.TypeId)));
+
                 cfg.CreateMap<Data.MediaFolder, Data.MediaFolder>()
                     .ForMember(f => f.Id, o => o.Ignore())
                     .ForMember(f => f.Created, o => o.Ignore())
@@ -74,6 +153,7 @@ namespace Piranha.Data.EF
                     .ForMember(f => f.FolderCount, o => o.Ignore())
                     .ForMember(f => f.MediaCount, o => o.Ignore())
                     .ForMember(f => f.Items, o => o.Ignore());
+
                 cfg.CreateMap<Data.Page, Models.PageBase>()
                     .ForMember(p => p.TypeId, o => o.MapFrom(m => m.PageTypeId))
                     .ForMember(p => p.Permalink, o => o.MapFrom(m => "/" + m.Slug))

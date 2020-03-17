@@ -41,9 +41,49 @@ namespace Piranha
         DbSet<Data.Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the content set.
+        /// </summary>
+        DbSet<Data.Content> Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content fields set.
+        /// </summary>
+        DbSet<Data.ContentField> ContentFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content field translation set.
+        /// </summary>
+        DbSet<Data.ContentFieldTranslation> ContentFieldTranslations { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content group set.
+        /// </summary>
+        DbSet<Data.ContentGroup> ContentGroups { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content group child type set.
+        /// </summary>
+        DbSet<Data.ContentGroupType> ContentGroupTypes { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content revision set.
+        /// </summary>
+        DbSet<Data.ContentRevision> ContentRevisions { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content translation set.
+        /// </summary>
+        DbSet<Data.ContentTranslation> ContentTranslations { get; set; }
+
+        /// <summary>
         /// Gets/sets the content type set.
         /// </summary>
         DbSet<Data.ContentType> ContentTypes { get; set; }
+
+        /// <summary>
+        /// Gets/sets the language set.
+        /// </summary>
+        DbSet<Data.Language> Languages { get; set; }
 
         /// <summary>
         /// Gets/sets the media set.

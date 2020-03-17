@@ -22,14 +22,14 @@ namespace Piranha.Repositories
     public class PostRepository : IPostRepository
     {
         private readonly IDb _db;
-        private readonly IContentService<Post, PostField, Models.PostBase> _contentService;
+        private readonly ILegacyContentService<Post, PostField, Models.PostBase> _contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db connection</param>
         /// <param name="factory">The current content service factory</param>
-        public PostRepository(IDb db, IContentServiceFactory factory)
+        public PostRepository(IDb db, ILegacyContentServiceFactory factory)
         {
             _db = db;
             _contentService = factory.CreatePostService();

@@ -33,7 +33,6 @@ namespace Piranha.Tests.Services
     [Collection("Integration tests")]
     public class ContentTypes : BaseTestsAsync
     {
-        protected ICache cache;
         private readonly List<ContentType> contentTypes = new List<ContentType>
         {
             new ContentType

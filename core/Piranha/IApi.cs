@@ -29,6 +29,16 @@ namespace Piranha
         IArchiveService Archives { get; }
 
         /// <summary>
+        /// Gets/sets the content service.
+        /// </summary>
+        IContentService Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content group service.
+        /// </summary>
+        IContentGroupService ContentGroups { get; set; }
+
+        /// <summary>
         /// Gets/sets the content type service.
         /// </summary>
         IContentTypeService ContentTypes { get; set; }

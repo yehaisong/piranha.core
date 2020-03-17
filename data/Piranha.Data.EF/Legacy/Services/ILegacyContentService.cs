@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Piranha.Services
 {
-    public interface IContentService<TContent, TField, TModelBase>
+    public interface ILegacyContentService<TContent, TField, TModelBase>
         where TContent : Data.ContentBase<TField>
         where TField : Data.ContentFieldBase
         where TModelBase : Models.ContentBase

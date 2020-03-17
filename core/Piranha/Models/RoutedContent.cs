@@ -55,5 +55,16 @@ namespace Piranha.Models
         /// </summary>
         [StringLength(256)]
         public string Route { get; set; }
+
+        /// <summary>
+        /// Gets/sets the optional redirect url.
+        /// </summary>
+        [StringLength(256)]
+        public string RedirectUrl { get; set; }
+
+        /// <summary>
+        /// Gets/sets the redirect type.
+        /// </summary>
+        public Models.RedirectType RedirectType { get; set; } = Models.RedirectType.Temporary;
     }
 }

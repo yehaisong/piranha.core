@@ -26,7 +26,7 @@ namespace Piranha.Data
         public string Group { get; set; }
 
         /// <summary>
-        /// Gets/sets the JSON serialized body of the post type.
+        /// Gets/sets the JSON serialized body of the content type.
         /// </summary>
         public string Body { get; set; }
 

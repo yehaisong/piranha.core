@@ -14,33 +14,8 @@ using Piranha.Models;
 
 namespace Piranha.Runtime
 {
-    public sealed class ContentTypeList : List<ContentType>
+    public sealed class ContentTypeList : CachedList<ContentType>
     {
-        /// <summary>
-        /// Initializes the model from the given list of types.
-        /// </summary>
-        /// <param name="types">The content types</param>
-        public void Init(IEnumerable<ContentType> types)
-        {
-            // Add the types
-            foreach (var type in types)
-            {
-                Add(type);
-            }
-
-            // Register runtime hooks to update the collection
-            App.Hooks.RegisterOnAfterSave<ContentType>((model) =>
-            {
-                var old = this.FirstOrDefault(t => t.Id == model.Id);
-
-                if (old != null)
-                {
-                    Remove(old);
-                }
-                Add(model);
-            });
-        }
-
         /// <summary>
         /// Gets the content type with the given id.
         /// </summary>
@@ -68,6 +43,16 @@ namespace Piranha.Runtime
         public IEnumerable<string> GetGroups()
         {
             return this.Select(t => t.Group).Distinct();
+        }
+
+        /// <summary>
+        /// Gets the item from the list that matches the given item.
+        /// </summary>
+        /// <param name="item">The item to search for</param>
+        /// <returns>The matching item in the list</returns>
+        protected override ContentType GetItem(ContentType item)
+        {
+            return this.FirstOrDefault(t => t.Id == item.Id);
         }
     }
 

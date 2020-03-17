@@ -48,9 +48,49 @@ namespace Piranha
         public DbSet<Data.Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets/sets the content set.
+        /// </summary>
+        public DbSet<Data.Content> Content { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content fields set.
+        /// </summary>
+        public DbSet<Data.ContentField> ContentFields { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content field translation set.
+        /// </summary>
+        public DbSet<Data.ContentFieldTranslation> ContentFieldTranslations { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content group set.
+        /// </summary>
+        public DbSet<Data.ContentGroup> ContentGroups { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content group child type set.
+        /// </summary>
+        public DbSet<Data.ContentGroupType> ContentGroupTypes { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content revision set.
+        /// </summary>
+        public DbSet<Data.ContentRevision> ContentRevisions { get; set; }
+
+        /// <summary>
+        /// Gets/sets the content translation set.
+        /// </summary>
+        public DbSet<Data.ContentTranslation> ContentTranslations { get; set; }
+
+        /// <summary>
         /// Gets/sets the content type set.
         /// </summary>
         public DbSet<Data.ContentType> ContentTypes { get; set; }
+
+        /// <summary>
+        /// Gets/sets the language set.
+        /// </summary>
+        public DbSet<Data.Language> Languages { get; set; }
 
         /// <summary>
         /// Gets/sets the media set.
@@ -215,8 +255,50 @@ namespace Piranha
             mb.Entity<Data.Category>().Property(c => c.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Category>().HasIndex(c => new { c.BlogId, c.Slug }).IsUnique();
 
+            mb.Entity<Data.Content>().ToTable("Piranha_Content");
+            mb.Entity<Data.Content>().Property(p => p.TypeId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.Content>().Property(p => p.Route).HasMaxLength(256);
+            mb.Entity<Data.Content>().Property(p => p.RedirectUrl).HasMaxLength(256);
+
+            mb.Entity<Data.ContentField>().ToTable("Piranha_ContentFields");
+            mb.Entity<Data.ContentField>().Property(f => f.RegionId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.ContentField>().Property(f => f.FieldId).HasMaxLength(64).IsRequired();
+            mb.Entity<Data.ContentField>().Property(f => f.TypeId).HasMaxLength(256).IsRequired();
+            mb.Entity<Data.ContentField>().HasIndex(f => new { f.ContentId, f.RegionId, f.FieldId, f.SortOrder });
+
+            mb.Entity<Data.ContentFieldTranslation>().ToTable("Piranha_ContentFieldTranslations");
+            mb.Entity<Data.ContentFieldTranslation>().HasKey(t => new { t.FieldId, t.LanguageId });
+
+            mb.Entity<Data.ContentGroup>().ToTable("Piranha_ContentGroups");
+            mb.Entity<Data.ContentGroup>().Property(t => t.Id).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.ContentGroup>().Property(t => t.TypeName).IsRequired().HasMaxLength(255);
+            mb.Entity<Data.ContentGroup>().Property(t => t.AssemblyName).IsRequired().HasMaxLength(255);
+            mb.Entity<Data.ContentGroup>().Property(t => t.Title).IsRequired().HasMaxLength(128);
+
+            mb.Entity<Data.ContentGroupType>().ToTable("Piranha_ContentGroupTypes");
+            mb.Entity<Data.ContentGroupType>().HasKey(t => new { t.GroupId, t.TypeId });
+            mb.Entity<Data.ContentGroupType>().Property(t => t.GroupId).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.ContentGroupType>().Property(t => t.TypeId).IsRequired().HasMaxLength(64);
+
+            mb.Entity<Data.ContentRevision>().ToTable("Piranha_ContentRevisions");
+
+            mb.Entity<Data.ContentTranslation>().ToTable("Piranha_ContentTranslations");
+            mb.Entity<Data.ContentTranslation>().HasKey(t => new { t.ContentId, t.LanguageId });
+            mb.Entity<Data.ContentTranslation>().Property(p => p.Title).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.ContentTranslation>().Property(p => p.NavigationTitle).HasMaxLength(128);
+            mb.Entity<Data.ContentTranslation>().Property(p => p.Slug).HasMaxLength(128).IsRequired();
+            mb.Entity<Data.ContentTranslation>().Property(p => p.MetaTitle).HasMaxLength(128);
+            mb.Entity<Data.ContentTranslation>().Property(p => p.MetaKeywords).HasMaxLength(128);
+            mb.Entity<Data.ContentTranslation>().Property(p => p.MetaDescription).HasMaxLength(256);
+            mb.Entity<Data.ContentTranslation>().HasIndex(p => p.Slug).IsUnique();
+
             mb.Entity<Data.ContentType>().ToTable("Piranha_ContentTypes");
             mb.Entity<Data.ContentType>().Property(t => t.Group).IsRequired().HasMaxLength(64);
+
+            mb.Entity<Data.Language>().ToTable("Piranha_Languages");
+            mb.Entity<Data.Language>().Property(l => l.Title).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Language>().Property(l => l.Slug).IsRequired().HasMaxLength(64);
+            mb.Entity<Data.Language>().Property(l => l.Culture).HasMaxLength(6);
 
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();
@@ -414,6 +496,20 @@ namespace Piranha
                     Created = DateTime.Now,
                     LastModified = DateTime.Now
                 });
+
+            //
+            // Default language
+            //
+            if (Languages.Count() == 0)
+            {
+                Languages.Add(new Data.Language
+                {
+                    Id = Guid.NewGuid(),
+                    Title = "Default",
+                    Slug = "en",
+                    Culture = "en-US"
+                });
+            }
 
             //
             // Default site

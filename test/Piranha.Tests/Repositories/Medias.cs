@@ -36,7 +36,6 @@ namespace Piranha.Tests.Repositories
         private Guid image3Id;
         private Guid image4Id;
         private Guid folder1Id;
-        protected ICache cache;
 
         protected override void Init() {
             using (var api = CreateApi()) {
@@ -274,31 +273,6 @@ namespace Piranha.Tests.Repositories
             using (var api = CreateApi()) {
                 api.Media.Delete(image4Id);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new ContentTypeRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

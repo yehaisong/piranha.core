@@ -22,14 +22,14 @@ namespace Piranha.Repositories
     public class SiteRepository : ISiteRepository
     {
         private readonly IDb _db;
-        private readonly IContentService<Site, SiteField, Models.SiteContentBase> _contentService;
+        private readonly ILegacyContentService<Site, SiteField, Models.SiteContentBase> _contentService;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
         /// <param name="db">The current db context</param>
         /// <param name="factory">The content service factory</param>
-        public SiteRepository(IDb db, IContentServiceFactory factory)
+        public SiteRepository(IDb db, ILegacyContentServiceFactory factory)
         {
             _db = db;
             _contentService = factory.CreateSiteService();

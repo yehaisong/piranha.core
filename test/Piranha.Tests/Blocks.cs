@@ -25,7 +25,7 @@ namespace Piranha.Tests
     public class Blocks : BaseTests
     {
         private Guid image1Id;
-        private IContentService<Page, PageField, Models.PageBase> contentService;
+        private ILegacyContentService<Page, PageField, Models.PageBase> contentService;
 
         /// <summary>
         /// Sets up and initializes the tests.
@@ -41,7 +41,7 @@ namespace Piranha.Tests
             using (var api = CreateApi()) {
                 Piranha.App.Init(api);
 
-                contentService = new ContentService<Page, PageField, Models.PageBase>(new LegacyContentFactory(services), Piranha.Data.EF.Module.Mapper);
+                contentService = new LegacyContentService<Page, PageField, Models.PageBase>(new LegacyContentFactory(services), Piranha.Data.EF.Module.Mapper);
 
                 // Add media
                 using (var stream = File.OpenRead("../../../Assets/HLD_Screenshot_01_mech_1080.png")) {
@@ -325,30 +325,6 @@ namespace Piranha.Tests
             Assert.Equal(typeof(Extend.Blocks.QuoteBlock).FullName, blocks[0].CLRType);
             Assert.Equal(typeof(Extend.Fields.TextField).FullName, blocks[0].Fields[0].CLRType);
             Assert.Equal("Lorem ipsum", blocks[0].Fields[0].Value);
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new ContentTypeRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                storage: storage
-            );
         }
     }
 }

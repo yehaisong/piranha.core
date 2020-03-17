@@ -30,7 +30,6 @@ namespace Piranha.Tests.Repositories
     [Collection("Integration tests")]
     public class SiteTypes : BaseTests
     {
-        protected ICache cache;
         private readonly List<SiteType> siteTypes = new List<SiteType>
         {
             new SiteType
@@ -244,31 +243,6 @@ namespace Piranha.Tests.Repositories
 
                 api.SiteTypes.Delete(model.Id);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new ContentTypeRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

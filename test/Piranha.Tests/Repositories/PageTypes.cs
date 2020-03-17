@@ -30,7 +30,6 @@ namespace Piranha.Tests.Repositories
     public class PageTypes : BaseTests
     {
         #region Members
-        protected ICache cache;
         private readonly List<PageType> pageTypes = new List<PageType>
         {
             new PageType
@@ -224,31 +223,6 @@ namespace Piranha.Tests.Repositories
 
                 api.PageTypes.Delete(model.Id);
             }
-        }
-
-        private IApi CreateApi()
-        {
-            var factory = new LegacyContentFactory(services);
-            var serviceFactory = new ContentServiceFactory(factory);
-
-            var db = GetDb();
-
-            return new Api(
-                factory,
-                new AliasRepository(db),
-                new ArchiveRepository(db),
-                new ContentTypeRepository(db),
-                new Piranha.Repositories.MediaRepository(db),
-                new PageRepository(db, serviceFactory),
-                new PageTypeRepository(db),
-                new ParamRepository(db),
-                new PostRepository(db, serviceFactory),
-                new PostTypeRepository(db),
-                new SiteRepository(db, serviceFactory),
-                new SiteTypeRepository(db),
-                cache: cache,
-                storage: storage
-            );
         }
     }
 }

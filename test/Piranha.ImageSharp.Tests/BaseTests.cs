@@ -12,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Piranha.Data.EF.SQLite;
+using Piranha.Repositories;
+using Piranha.Services;
 
 namespace Piranha.ImageSharp.Tests
 {
@@ -52,12 +54,41 @@ namespace Piranha.ImageSharp.Tests
         /// <summary>
         /// Gets the test context.
         /// </summary>
-        protected IDb GetDb() {
+        protected virtual IDb GetDb() {
             var builder = new DbContextOptionsBuilder<SQLiteDb>();
 
             builder.UseSqlite("Filename=./piranha.imagesharp.tests.db");
 
             return new SQLiteDb(builder.Options);
+        }
+
+        protected virtual IApi CreateApi()
+        {
+            var factory = new LegacyContentFactory(services);
+            var contentFactory = new ContentFactory(services);
+            var serviceFactory = new LegacyContentServiceFactory(factory);
+
+            var db = GetDb();
+
+            return new Api(
+                factory,
+                contentFactory,
+                new AliasRepository(db),
+                new ArchiveRepository(db),
+                new ContentRepository(db, new TransformationService(contentFactory)),
+                new ContentGroupRepository(db),
+                new ContentTypeRepository(db),
+                new Piranha.Repositories.MediaRepository(db),
+                new PageRepository(db, serviceFactory),
+                new PageTypeRepository(db),
+                new ParamRepository(db),
+                new PostRepository(db, serviceFactory),
+                new PostTypeRepository(db),
+                new SiteRepository(db, serviceFactory),
+                new SiteTypeRepository(db),
+                storage: storage,
+                processor: processor
+            );
         }
     }
 }

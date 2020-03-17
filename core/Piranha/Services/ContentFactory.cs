@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
@@ -134,6 +135,26 @@ namespace Piranha.Services
                     }
                 }
                 return model;
+            }
+        }
+
+        /// <summary>
+        /// Creates a new dynamic region.
+        /// </summary>
+        /// <param name="type">The content type</param>
+        /// <param name="regionId">The region id</param>
+        /// <returns>The new region value</returns>
+        public Task<object> CreateDynamicRegionAsync(ContentType type, string regionId)
+        {
+            using (var scope = _services.CreateScope())
+            {
+                var regionType = type.Regions.FirstOrDefault(r => r.Id == regionId);
+
+                if (regionType != null)
+                {
+                    return CreateDynamicRegionAsync(scope, regionType);
+                }
+                return null;
             }
         }
 

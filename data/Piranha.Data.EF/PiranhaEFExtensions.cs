@@ -42,6 +42,8 @@ public static class PiranhaEFExtensions
         // Register repositories
         services.Add(new ServiceDescriptor(typeof(IAliasRepository), typeof(AliasRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IArchiveRepository), typeof(ArchiveRepository), scope));
+        services.Add(new ServiceDescriptor(typeof(IContentRepository), typeof(ContentRepository), scope));
+        services.Add(new ServiceDescriptor(typeof(IContentGroupRepository), typeof(ContentGroupRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IContentTypeRepository), typeof(ContentTypeRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IMediaRepository), typeof(MediaRepository), scope));
         services.Add(new ServiceDescriptor(typeof(IPageRepository), typeof(PageRepository), scope));
@@ -53,8 +55,8 @@ public static class PiranhaEFExtensions
         services.Add(new ServiceDescriptor(typeof(ISiteTypeRepository), typeof(SiteTypeRepository), scope));
 
         // Register services
-        // services.Add(new ServiceDescriptor(typeof(IContentFactory), typeof(ContentFactory), ServiceLifetime.Singleton));
-        services.Add(new ServiceDescriptor(typeof(IContentServiceFactory), typeof(ContentServiceFactory), ServiceLifetime.Singleton));
+        services.Add(new ServiceDescriptor(typeof(ITransformationService), typeof(TransformationService), ServiceLifetime.Singleton));
+        services.Add(new ServiceDescriptor(typeof(ILegacyContentServiceFactory), typeof(LegacyContentServiceFactory), ServiceLifetime.Singleton));
         services.Add(new ServiceDescriptor(typeof(IDb), typeof(T), scope));
 
         return services;

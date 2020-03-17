@@ -15,10 +15,29 @@ namespace Piranha.Extend
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ContentGroupAttribute : Attribute
     {
+        private string _title;
+
+        /// <summary>
+        /// Gets/sets the unique id.
+        /// </summary>
+        public string Id { get; set; }
+
         /// <summary>
         /// Gets/sets the title.
         /// </summary>
-        public string Title { get; set; }
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+
+                if (string.IsNullOrWhiteSpace(Id))
+                {
+                    Id = Utils.GenerateInteralId(value);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets/sets the default route for the content group.

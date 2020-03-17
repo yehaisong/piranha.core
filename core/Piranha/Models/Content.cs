@@ -28,11 +28,14 @@ namespace Piranha.Models
         /// <summary>
         /// Gets/sets the type id.
         /// </summary>
+        [Required]
+        [StringLength(64)]
         public string TypeId { get; set; }
 
         /// <summary>
         /// Gets/sets the main title.
         /// </summary>
+        [Required]
         [StringLength(128)]
         public string Title { get; set; }
 

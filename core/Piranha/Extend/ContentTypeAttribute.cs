@@ -15,6 +15,8 @@ namespace Piranha.Extend
     [AttributeUsage(AttributeTargets.Class)]
     public sealed class ContentTypeAttribute : Attribute
     {
+        private string _title;
+
         /// <summary>
         /// Gets/sets the unique id.
         /// </summary>
@@ -23,7 +25,19 @@ namespace Piranha.Extend
         /// <summary>
         /// Gets/sets the optional title.
         /// </summary>
-        public string Title { get; set; }
+        public string Title
+        {
+            get => _title;
+            set
+            {
+                _title = value;
+
+                if (string.IsNullOrWhiteSpace(Id))
+                {
+                    Id = Utils.GenerateInteralId(value);
+                }
+            }
+        }
 
         /// <summary>
         /// Gets/sets if blocks should be used. This is only applicable
