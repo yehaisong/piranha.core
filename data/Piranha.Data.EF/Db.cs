@@ -299,6 +299,7 @@ namespace Piranha
             mb.Entity<Data.Language>().Property(l => l.Title).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Language>().Property(l => l.Slug).IsRequired().HasMaxLength(64);
             mb.Entity<Data.Language>().Property(l => l.Culture).HasMaxLength(6);
+            mb.Entity<Data.Language>().HasIndex(l => l.Slug).IsUnique();
 
             mb.Entity<Data.Media>().ToTable("Piranha_Media");
             mb.Entity<Data.Media>().Property(m => m.Filename).HasMaxLength(128).IsRequired();

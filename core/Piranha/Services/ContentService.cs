@@ -9,11 +9,8 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
-using Piranha.Cache;
 using Piranha.Models;
 using Piranha.Repositories;
 
@@ -23,13 +20,23 @@ namespace Piranha.Services
     {
         private readonly IContentRepository _pageRepo;
         private readonly IContentFactory _factory;
+        private readonly ILanguageService _langService;
         private readonly ICache _cache;
         private readonly ISearch _search;
 
-        public ContentService(IContentRepository pageRepo, IContentFactory factory, ICache cache = null, ISearch search = null)
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="pageRepo">The main page repository</param>
+        /// <param name="factory">The content factory</param>
+        /// <param name="langService">The language service</param>
+        /// <param name="cache">The optional cache service</param>
+        /// <param name="search">The optional search service</param>
+        public ContentService(IContentRepository pageRepo, IContentFactory factory, ILanguageService langService, ICache cache = null, ISearch search = null)
         {
             _pageRepo = pageRepo;
             _factory = factory;
+            _langService = langService;
 
             if ((int)App.CacheLevel > 2)
             {
@@ -52,7 +59,7 @@ namespace Piranha.Services
             // Make sure we have a language id
             if (languageId == null)
             {
-                throw new ArgumentException();
+                languageId = (await _langService.GetDefaultAsync())?.Id;
             }
 
             // First, try to get the model from cache
@@ -93,12 +100,18 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The content model</param>
         /// <param name="languageId">The selected language id</param>
-        public async Task SaveAsync<T>(T model, Guid languageId) where T : Content
+        public async Task SaveAsync<T>(T model, Guid? languageId = null) where T : Content
         {
             // Make sure we have an Id
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
+            }
+
+            // Make sure we have a language id
+            if (languageId == null)
+            {
+                languageId = (await _langService.GetDefaultAsync())?.Id;
             }
 
             // Validate model
@@ -120,7 +133,7 @@ namespace Piranha.Services
 
             // Call hooks and save
             App.Hooks.OnBeforeSave<Content>(model);
-            await _pageRepo.SaveAsync(model, languageId);
+            await _pageRepo.SaveAsync(model, languageId.Value);
             App.Hooks.OnAfterSave<Content>(model);
 
             // Remove from cache

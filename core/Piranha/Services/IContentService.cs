@@ -30,7 +30,7 @@ namespace Piranha.Services
         /// </summary>
         /// <param name="model">The content model</param>
         /// <param name="languageId">The selected language id</param>
-        Task SaveAsync<T>(T model, Guid languageId) where T : Content;
+        Task SaveAsync<T>(T model, Guid? languageId) where T : Content;
 
         /// <summary>
         /// Deletes the content model with the specified id.

@@ -34,5 +34,10 @@ namespace Piranha.Data
         /// Gets/sets the culture.
         /// </summary>
         public string Culture { get; set; }
+
+        /// <summary>
+        /// Gets/sets if this is the default language.
+        /// </summary>
+        public bool IsDefault { get; set; }
     }
 }
