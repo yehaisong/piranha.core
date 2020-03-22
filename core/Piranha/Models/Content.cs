@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 
 namespace Piranha.Models
 {
@@ -74,5 +75,17 @@ namespace Piranha.Models
         /// Gets/sets the published date.
         /// </summary>
         public DateTime? Published { get; set; }
+
+        /// <summary>
+        /// Creates a new content model.
+        /// </summary>
+        /// <param name="api">The current api</param>
+        /// <param name="typeId">The optional type id</param>
+        /// <typeparam name="T">The model type</typeparam>
+        /// <returns>The model</returns>
+        public static Task<T> CreateAsync<T>(IApi api, string typeId = null) where T : Content
+        {
+            return api.Content.CreateAsync<T>(typeId);
+        }
     }
 }

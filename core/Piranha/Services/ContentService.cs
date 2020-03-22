@@ -10,6 +10,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Threading.Tasks;
 using Piranha.Models;
 using Piranha.Repositories;
@@ -46,11 +47,43 @@ namespace Piranha.Services
         }
 
         /// <summary>
+        /// Creates and initializes a new content model.
+        /// </summary>
+        /// <param name="typeId">The content type id</param>
+        /// <returns>The created page</returns>
+        public async Task<T> CreateAsync<T>(string typeId) where T : Content
+        {
+            if (typeId == null)
+            {
+                var attr = typeof(T).GetCustomAttribute<Extend.ContentTypeAttribute>();
+                if (attr != null)
+                {
+                    typeId = attr.Id;
+                }
+            }
+
+            var type = App.ContentTypes.GetById(typeId);
+
+            if (type != null)
+            {
+                var model = await _factory.CreateAsync<T>(type).ConfigureAwait(false);
+
+                //using (var config = new Config(_paramService))
+                //{
+                //    model.EnableComments = config.CommentsEnabledForPages;
+                //    model.CloseCommentsAfterDays = config.CommentsCloseAfterDays;
+                //}
+                return model;
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Gets the content model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
-        /// <param name="languageId">The selected language id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The content model</returns>
         public async Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : Content
         {
@@ -99,7 +132,7 @@ namespace Piranha.Services
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>
-        /// <param name="languageId">The selected language id</param>
+        /// <param name="languageId">The optional language id</param>
         public async Task SaveAsync<T>(T model, Guid? languageId = null) where T : Content
         {
             // Make sure we have an Id

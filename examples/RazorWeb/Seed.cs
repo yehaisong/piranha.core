@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Piranha;
 using Piranha.Extend.Blocks;
+using Piranha.Models;
 
 namespace RazorWeb
 {
@@ -47,6 +48,16 @@ namespace RazorWeb
                         });
                     }
                 }
+
+                // Create new content
+                var content = await Content.CreateAsync<Models.Content.BasicPage>(api);
+                content.Id = new Guid("0925C28A-9458-49F6-BAF1-7DF2094A8DF3");
+                content.Title = "Adipiscing Egestas Vulputate";
+                content.NavigationTitle = "Adipiscing";
+                content.Hero.Ingress = "Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.";
+                content.Hero.PrimaryImage = images[0].id;
+                content.Published = DateTime.Now;
+                await api.Content.SaveAsync(content);
 
                 // Create the start page
                 var startpage = await Models.TeaserPage.CreateAsync(api).ConfigureAwait(false);

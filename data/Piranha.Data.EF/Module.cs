@@ -72,6 +72,7 @@ namespace Piranha.Data.EF
                     .ForMember(c => c.CommentCount, o => o.Ignore())
                     .ForMember(c => c.Permissions, o => o.Ignore());
                 cfg.CreateMap<Models.Content, Data.Content>()
+                    .ForMember(c => c.Id, o => o.Ignore())
                     .ForMember(c => c.Route, o => o.Ignore())
                     .ForMember(c => c.RedirectType, o => o.Ignore())
                     .ForMember(c => c.RedirectUrl, o => o.Ignore())
@@ -91,6 +92,7 @@ namespace Piranha.Data.EF
                     .ForMember(c => c.Route, o => o.Ignore())
                     .ForMember(c => c.Permissions, o => o.Ignore());
                 cfg.CreateMap<Models.RoutedContent, Data.Content>()
+                    .ForMember(c => c.Id, o => o.Ignore())
                     .ForMember(c => c.Created, o => o.Ignore())
                     .ForMember(c => c.LastModified, o => o.Ignore())
                     .ForMember(c => c.Fields, o => o.Ignore())

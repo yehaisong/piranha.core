@@ -508,7 +508,8 @@ namespace Piranha
                     Id = Guid.NewGuid(),
                     Title = "Default",
                     Slug = "en",
-                    Culture = "en-US"
+                    Culture = "en-US",
+                    IsDefault = true
                 });
             }
 

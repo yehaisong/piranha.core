@@ -17,20 +17,27 @@ namespace Piranha.Services
     public interface IContentService
     {
         /// <summary>
+        /// Creates and initializes a new content model.
+        /// </summary>
+        /// <param name="typeId">The content type id</param>
+        /// <returns>The created page</returns>
+        Task<T> CreateAsync<T>(string typeId) where T : Content;
+
+        /// <summary>
         /// Gets the content model with the specified id.
         /// </summary>
         /// <typeparam name="T">The model type</typeparam>
         /// <param name="id">The unique id</param>
-        /// <param name="languageId">The selected language id</param>
+        /// <param name="languageId">The optional language id</param>
         /// <returns>The content model</returns>
-        Task<T> GetByIdAsync<T>(Guid id, Guid? languageId) where T : Content;
+        Task<T> GetByIdAsync<T>(Guid id, Guid? languageId = null) where T : Content;
 
         /// <summary>
         /// Saves the given content model
         /// </summary>
         /// <param name="model">The content model</param>
-        /// <param name="languageId">The selected language id</param>
-        Task SaveAsync<T>(T model, Guid? languageId) where T : Content;
+        /// <param name="languageId">The optional language id</param>
+        Task SaveAsync<T>(T model, Guid? languageId = null) where T : Content;
 
         /// <summary>
         /// Deletes the content model with the specified id.

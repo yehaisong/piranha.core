@@ -4,6 +4,7 @@
 
     var groups = Piranha.App.ContentGroups;
     var types = Piranha.App.ContentTypes;
+    var content = await WebApp.Api.Content.GetByIdAsync<RazorWeb.Models.Content.BasicPage>(new Guid("0925C28A-9458-49F6-BAF1-7DF2094A8DF3"));
 }
 
 <h2>Content Groups</h2>
@@ -13,3 +14,7 @@
 <h2>Content Types</h2>
 
 <pre>@Newtonsoft.Json.JsonConvert.SerializeObject(types)</pre>
+
+<h2>Content</h2>
+
+<pre>@Newtonsoft.Json.JsonConvert.SerializeObject(content)</pre>
